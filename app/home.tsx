@@ -3,7 +3,8 @@ import { Link } from 'expo-router';
 
 
 export default function Home() {
-    return ( 
+    return (
+ 
       <View style={styles.container}>
               <Text>Main</Text>
               <Link href="/">Back to login page</Link>

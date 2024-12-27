@@ -1,9 +1,14 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
-import { useFonts } from 'expo-font';
-import * as SplashScreen from 'expo-splash-screen'
 import { useEffect } from 'react';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import * as SplashScreen from 'expo-splash-screen'
 import { Link } from 'expo-router';
+import { useFonts } from 'expo-font';
+
+import AppButton from '../src/components/Buttons';
+import { MainContainer, ContentContainer, SvgContainer, FormContainer, UsernameContainer, PasswordFormContainer, PasswordForm, PasswordButton, LoginButtonContainer } from '../src/styles/index';
+import AppInput from '../src/components/Inputs';
+import { SvgXml } from 'react-native-svg';
+import { AppSvg } from '../src/constants/svg';
 
 export default function Login() {
   
@@ -27,9 +32,36 @@ export default function Login() {
 
 
   return (
-    <>
-      <Link href="/home" style={{marginTop:100}}>Go to Home</Link>
-    </> )
+      <MainContainer>
+        <ContentContainer>
+
+          <SvgContainer>
+            <SvgXml xml={AppSvg.mainLogo}/>
+          </SvgContainer>
+
+          <FormContainer>
+            <UsernameContainer>
+              <AppInput inputType="default" placeholder="Username" />
+            </UsernameContainer>
+
+            <PasswordFormContainer>
+              <PasswordForm>
+                <AppInput inputType="password" placeholder="Password"/>
+              </PasswordForm>
+              <PasswordButton>
+                <AppButton content="" buttonType="password"/>
+              </PasswordButton>
+            </PasswordFormContainer>
+
+            <LoginButtonContainer>
+              <AppButton content="Login" buttonType="default"/>
+            </LoginButtonContainer>
+          </FormContainer>
+
+          {/* <Link href="/home">Go to Home</Link> */}
+        </ContentContainer>
+      </MainContainer>
+    )
 }
 
 
