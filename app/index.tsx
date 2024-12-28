@@ -54,11 +54,13 @@ export default function Login() {
             </PasswordFormContainer>
 
             <LoginButtonContainer>
-              <AppButton content="Login" buttonType="default"/>
+              <AppButton content="Login" buttonType="default">
+
+              </AppButton>
             </LoginButtonContainer>
           </FormContainer>
+          <Link href="/home">Go to Home</Link>
 
-          {/* <Link href="/home">Go to Home</Link> */}
         </ContentContainer>
       </MainContainer>
     )

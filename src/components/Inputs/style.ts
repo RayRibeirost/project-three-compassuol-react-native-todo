@@ -7,4 +7,5 @@ export const AppInputComponent = styled.TextInput`
     border: 1px solid ${colors.base.gray300};
     padding-left: 10px;
     border-radius: 8px;
+    background-color: ${colors.base.gray100}
 `;
