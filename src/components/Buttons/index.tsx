@@ -17,10 +17,25 @@ export default function AppButton ({buttonType, content} : Props){
             </MainContainer>
         )
     }
-    if (buttonType = "password") {
+    if (buttonType === "password") {
         return (
             <MainContainer>
                 <SvgXml xml={AppSvg.isVisible} />
+            </MainContainer>
+        )
+    }
+    if (buttonType === "search") {
+        return (
+            <MainContainer>
+                <SvgXml xml={AppSvg.searchIcon} />
+            </MainContainer>
+        )
+    }
+    if (buttonType === "createTask") {
+        return (
+            <MainContainer>
+                <ButtonText>{content}</ButtonText>
+                <SvgXml xml={AppSvg.createSign} />
             </MainContainer>
         )
     }

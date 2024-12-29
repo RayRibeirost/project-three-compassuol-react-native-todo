@@ -4,7 +4,7 @@ import AppButton from "../src/components/Buttons";
 import { SvgXml } from "react-native-svg";
 import { AppSvg } from "../src/constants/svg";
 import AppInput from "../src/components/Inputs";
-import { MainContainer, ContentContainer, HeaderContainer, LogoutSingContainer, MainLogoContainer, SearchContainer, SearchInputContainer, SearchButtonContainer, GrayRectangle, TasksContainer, LoadingContentContainer, TaskCounterContainer, TaskCounterButton, TaskCounterText, TaskCounterMain, TaskCounterCompleted, TaskListContainer, CreateButtonContainer, ButtonContainer } from "../src/styles/home";
+import { MainContainer, ContentContainer, HeaderContainer, LogoutSingContainer, MainLogoContainer, SearchContainer, SearchInputContainer, SearchButtonContainer, GrayRectangle, TasksContainer, LoadingContentContainer, TaskCounterContainer, TaskCounterButton, TaskCounterText, TaskCounterMain, TaskCounterCompleted, TaskListContainer, CreateButtonContainer, ButtonContainer, ListEmptyContainer, ListEmptyPrimaryText, ListtEmptySecondatyText } from "../src/styles/home";
 import TaskCard from "../src/components/TaskCard";
 
 const generateId = () => `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
@@ -136,7 +136,7 @@ export default function Home() {
                   <AppInput inputType="default" placeholder="Pesquisar Tarefa"/>
                 </SearchInputContainer>
                 <SearchButtonContainer>
-                  <AppButton buttonType="password" content="Criar"/>
+                  <AppButton buttonType="search" content=""/>
                 </SearchButtonContainer>
               </SearchContainer>
             </HeaderContainer>
@@ -162,6 +162,13 @@ export default function Home() {
                       data={DATA}
                       renderItem={({item}) => <TaskCard content={item.task} />}
                       keyExtractor={item => item.id}
+                      ListEmptyComponent={
+                        <ListEmptyContainer>
+                          <SvgXml xml={AppSvg.noItemsInserted}/>
+                          <ListEmptyPrimaryText>Você ainda não tem tarefas cadastradas</ListEmptyPrimaryText>
+                          <ListtEmptySecondatyText>Crie tarefas e organize seus itens a fazer</ListtEmptySecondatyText>
+                        </ListEmptyContainer>
+                      }
                     />
                   </TaskListContainer>
                 
@@ -169,7 +176,7 @@ export default function Home() {
                 
                   <CreateButtonContainer>
                     <ButtonContainer>
-                      <AppButton buttonType="default" content="Criar"/>
+                      <AppButton buttonType="createTask" content="Criar"/>
                     </ButtonContainer>
                   </CreateButtonContainer>
               </LoadingContentContainer>

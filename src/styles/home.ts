@@ -129,4 +129,22 @@ export const CreateButtonContainer = styled.View`
 export const ButtonContainer = styled.View`
     width: 30%;
     margin-top:10px;
-`; 
+`;
+
+export const ListEmptyContainer = styled.View`
+    margin-top: 30px;
+    justify-content: center;
+    align-items: center;
+    gap: 1px;
+`;
+export const ListEmptyPrimaryText = styled.Text`
+    font-family: Inter-SemiBold;
+    font-size: 14px;
+    color: ${colors.base.gray500};
+    margin-top: 20px;
+`;
+export const ListtEmptySecondatyText = styled.Text`
+    font-family: Inter-Regular;
+    font-size: 14px;
+    color: ${colors.base.gray500};
+`;
