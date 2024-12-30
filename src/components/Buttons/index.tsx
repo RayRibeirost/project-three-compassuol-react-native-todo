@@ -6,34 +6,36 @@ import { MainContainer, ButtonText } from "./style";
 
 type Props = {
     content : string | null;
-    buttonType : string ;
+    buttonType : string;
+    onPress: any;
+    isVisible: any | null ;
 }
 
-export default function AppButton ({buttonType, content} : Props){
+export default function AppButton ({buttonType, content, onPress, isVisible} : Props){
     if (buttonType === "default") {
         return (
-            <MainContainer>
+            <MainContainer onPress={onPress}>
                 <ButtonText>{content}</ButtonText>
             </MainContainer>
         )
     }
     if (buttonType === "password") {
         return (
-            <MainContainer>
-                <SvgXml xml={AppSvg.isVisible} />
+            <MainContainer onPress={onPress}>
+                <SvgXml xml={isVisible} />
             </MainContainer>
         )
     }
     if (buttonType === "search") {
         return (
-            <MainContainer>
+            <MainContainer onPress={onPress}>
                 <SvgXml xml={AppSvg.searchIcon} />
             </MainContainer>
         )
     }
     if (buttonType === "createTask") {
         return (
-            <MainContainer>
+            <MainContainer onPress={onPress}>
                 <ButtonText>{content}</ButtonText>
                 <SvgXml xml={AppSvg.createSign} />
             </MainContainer>

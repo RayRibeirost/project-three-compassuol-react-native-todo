@@ -1,11 +1,12 @@
-import { View, Text, StyleSheet, StatusBar, ScrollView, FlatList, TouchableOpacity } from "react-native";
-import { Link } from 'expo-router';
-import AppButton from "../src/components/Buttons";
+import { useEffect } from "react";
+import { FlatList, TouchableOpacity } from "react-native";
 import { SvgXml } from "react-native-svg";
-import { AppSvg } from "../src/constants/svg";
-import AppInput from "../src/components/Inputs";
-import { MainContainer, ContentContainer, HeaderContainer, LogoutSingContainer, MainLogoContainer, SearchContainer, SearchInputContainer, SearchButtonContainer, GrayRectangle, TasksContainer, LoadingContentContainer, TaskCounterContainer, TaskCounterButton, TaskCounterText, TaskCounterMain, TaskCounterCompleted, TaskListContainer, CreateButtonContainer, ButtonContainer, ListEmptyContainer, ListEmptyPrimaryText, ListtEmptySecondatyText } from "../src/styles/home";
-import TaskCard from "../src/components/TaskCard";
+import { AppSvg } from "../../src/constants/svg";
+import { MainContainer, ContentContainer, HeaderContainer, LogoutSingContainer, MainLogoContainer, SearchContainer, SearchInputContainer, SearchButtonContainer, GrayRectangle, TasksContainer, LoadingContentContainer, TaskCounterContainer, TaskCounterButton, TaskCounterText, TaskCounterMain, TaskCounterCompleted, TaskListContainer, CreateButtonContainer, ButtonContainer, ListEmptyContainer, ListEmptyPrimaryText, ListtEmptySecondatyText } from "./style";
+import { useAuth } from "../../src/context/AuthContext";
+import AppButton from "../../src/components/Buttons";
+import AppInput from "../../src/components/Inputs";
+import TaskCard from "../../src/components/TaskCard";
 
 const generateId = () => `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
 
@@ -116,6 +117,9 @@ const DATA = [
 ]
 
 export default function Home() {
+
+    const { onLogout } = useAuth()
+
     return (
       <MainContainer>
 
@@ -124,7 +128,9 @@ export default function Home() {
             <HeaderContainer>
 
               <LogoutSingContainer>
-                <SvgXml xml={AppSvg.logoutSign}/>
+                <TouchableOpacity onPress={onLogout}>
+                  <SvgXml xml={AppSvg.logoutSign}/>
+                </TouchableOpacity>
               </LogoutSingContainer>
 
               <MainLogoContainer>

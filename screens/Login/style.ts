@@ -1,5 +1,5 @@
 import { styled } from "styled-components/native";
-import { colors } from "../constants/colors";
+import { colors } from "../../src/constants/colors";
 
 
 export const MainContainer = styled.View`
@@ -31,7 +31,6 @@ export const FormContainer = styled.View`
 
 export const UsernameContainer = styled.View`
     width: 100%;
-    margin-bottom: 10px;
 `;
 
 export const PasswordFormContainer = styled.View`
@@ -39,7 +38,6 @@ export const PasswordFormContainer = styled.View`
     align-items: center;
     justify-content: space-between;
     width: 100%;
-    margin-bottom: 10px;
 `;
 
 export const PasswordForm = styled.View`
