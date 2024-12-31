@@ -10,6 +10,7 @@ interface AuthProps {
 
 const TOKEN_KEY = 'my-jwt';
 export const API_URL = axios.create({ baseURL: "https://dummyjson.com/users" });
+export const todos_api = axios.create({ baseURL: "https://dummyjson.com" });
 const AuthContext = createContext<AuthProps>({})
 
 export const useAuth = () => {
@@ -75,4 +76,28 @@ export const AuthProvider = ({children} : any) => {
     };
 
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
+}
+
+export const getTasks = async() => {
+    const response = await todos_api.get('/todos/');
+    return response.data
+}
+
+export const createTask = async(title:string) => {
+    const response = await todos_api.post('todo/add', {title});
+    return response.data;
+}
+
+export const updateTask = async(id: number, title: string) => {
+    const response = await todos_api.put(`/todos/${id}`, {title});
+    return response.data
+}
+
+export const toggleTaskCompleted = async (id:number, completed:boolean) => {
+    const response = await todos_api.patch(`todos/${id}/completed`, {completed})
+    return response.data
+}
+
+export const deleteTask = async(id: number) => {
+    await todos_api.delete(`/todos/${id}`)
 }

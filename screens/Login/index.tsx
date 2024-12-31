@@ -39,6 +39,7 @@ export default function Login() {
             <UsernameContainer>
               <AppInput inputType="default" placeholder="Username" onChangeText={(text:string) => setUsername(text)} value={username} secureTextEntry={false} borderStyle={errorLogin? {borderColor:`${colors.feedback.danger}`} : {}}/>
             </UsernameContainer>
+
             <View style={errorLogin? {width:"100%", marginVertical:3, flexDirection:"row", alignItems:"center", justifyContent:"flex-start"} : {width:"100%", marginVertical:3}}>
               <Text style={errorLogin? {width:"100%", color:colors.feedback.danger, fontFamily:'Inter-Bold', fontSize:12} : {display:"none"}}>Username inválido</Text>
             </View>
@@ -51,6 +52,7 @@ export default function Login() {
                 <AppButton content="" buttonType="password" onPress={() => showPassword ? setShowPassword(false) : setShowPassword(true)} isVisible={showPassword ? AppSvg.isVisible : AppSvg.isNotVisible}/>
               </PasswordButton>
             </PasswordFormContainer>
+            
             <View style={errorLogin? {width:"100%", marginVertical:3, flexDirection:"row", alignItems:"center", justifyContent:"flex-start"} : {width:"100%", marginVertical:3}}>
               <Text style={errorLogin? {width:"100%", color:colors.feedback.danger, fontFamily:'Inter-Bold', fontSize:12} : {display:"none"}}>Senha inválida</Text>
             </View>

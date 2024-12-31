@@ -1,9 +1,9 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { FlatList, TouchableOpacity } from "react-native";
 import { SvgXml } from "react-native-svg";
 import { AppSvg } from "../../src/constants/svg";
 import { MainContainer, ContentContainer, HeaderContainer, LogoutSingContainer, MainLogoContainer, SearchContainer, SearchInputContainer, SearchButtonContainer, GrayRectangle, TasksContainer, LoadingContentContainer, TaskCounterContainer, TaskCounterButton, TaskCounterText, TaskCounterMain, TaskCounterCompleted, TaskListContainer, CreateButtonContainer, ButtonContainer, ListEmptyContainer, ListEmptyPrimaryText, ListtEmptySecondatyText } from "./style";
-import { useAuth } from "../../src/context/AuthContext";
+import { useAuth, getTasks, createTask, updateTask, toggleTaskCompleted, deleteTask } from "../../src/context/AuthContext";
 import AppButton from "../../src/components/Buttons";
 import AppInput from "../../src/components/Inputs";
 import TaskCard from "../../src/components/TaskCard";
@@ -12,185 +12,120 @@ const generateId = () => `${Date.now()}-${Math.random().toString(36).substr(2, 9
 
 const isLoaded: boolean = false
 
-const DATA = [
-  {
-    task : "Organize your desk and declutter unnecessary items.",
-    id: generateId(),
-    taskCompleted : false
-  },
-  {
-    task : "Write a list of your goals for the next week.",
-    id: generateId(),
-    taskCompleted : false
-  },
-  {
-    task : "Water your indoor plants and check their sunlight needs.",
-    id: generateId(),
-    taskCompleted : false
-  },
-  {
-    task : "Research a new recipe and try cooking it for dinner.",
-    id: generateId(),
-    taskCompleted : false
-  },
-  {
-    task : "Plan a weekend hike or outdoor activity.",
-    id: generateId(),
-    taskCompleted : false
-  },
-  {
-    task : "Back up important files from your computer to the cloud.",
-    id: generateId(),
-    taskCompleted : false
-  },
-  {
-    task : "Read a chapter of a book you've been meaning to finish.",
-    id: generateId(),
-    taskCompleted : false
-  },
-  {
-    task : "Create a playlist of your favorite relaxing songs.",
-    id: generateId(),
-    taskCompleted : false
-  },
-  {
-    task : "Stretch or do a 10-minute yoga session.",
-    id: generateId(),
-    taskCompleted : false
-  },
-  {
-    task : "Write a thank-you note to someone who helped you recently. ",
-    id: generateId(),
-    taskCompleted : false
-  },
-  {
-    task : "Organize your desk and declutter unnecessary items.",
-    id: generateId(),
-    taskCompleted : false
-  },
-  {
-    task : "Write a list of your goals for the next week.",
-    id: generateId(),
-    taskCompleted : false
-  },
-  {
-    task : "Water your indoor plants and check their sunlight needs.",
-    id: generateId(),
-    taskCompleted : false
-  },
-  {
-    task : "Research a new recipe and try cooking it for dinner.",
-    id: generateId(),
-    taskCompleted : false
-  },
-  {
-    task : "Plan a weekend hike or outdoor activity.",
-    id: generateId(),
-    taskCompleted : false
-  },
-  {
-    task : "Back up important files from your computer to the cloud.",
-    id: generateId(),
-    taskCompleted : false
-  },
-  {
-    task : "Read a chapter of a book you've been meaning to finish.",
-    id: generateId(),
-    taskCompleted : false
-  },
-  {
-    task : "Create a playlist of your favorite relaxing songs.",
-    id: generateId(),
-    taskCompleted : false
-  },
-  {
-    task : "Stretch or do a 10-minute yoga session.",
-    id: generateId(),
-    taskCompleted : false
-  },
-  {
-    task : "Write a thank-you note to someone who helped you recently. ",
-    id: generateId(),
-    taskCompleted : false
-  },
-
-]
-
 export default function Home() {
+  const { onLogout } = useAuth();
 
-    const { onLogout } = useAuth()
+  const [tasks, setTasks] = useState([]);
+
+  const [tasksCounter, setTaskCounter] = useState(0)
+  const [tasksCompletedCounter, setTaskCompletedCounter] = useState(0);
+
+  const [showCompleted, setShowCompleted] = useState(false)
+  const [tasksCompleted, setTaskCompleted] = useState([])
+
+  const [searchTask, setSearchTask] = useState('')
+  const [filteredTasks, setFilteredTasks] = useState('')
+
+  let completedCounter = 0;
+
+  const loadTasks = async () => {
+    const data = await getTasks();
+    setTasks(data.todos.sort((a, b) => (a.completed === b.completed ? 0 : a.completed ? 1 : -1)))
+
+    setTaskCounter(data.todos.length)
+    data.todos.forEach(item => {item.completed ? completedCounter +=1 : completedCounter += 0})
+
+    setTaskCompletedCounter(completedCounter)
+    setTaskCompleted(data.todos.filter(item => item.completed))
+  }
+
+  useEffect(() => {loadTasks();
+  }, [])
+
+  const handleToggleCompleted = async (id:number, completed: boolean) => {
+    await toggleTaskCompleted(id, !completed)
+    loadTasks()
+  }
+  
+  const handleDeleteTask = async (id: number) => {
+    await deleteTask(id);
+    loadTasks();
+  }
+
+  const resetVisibility = () => {
+    setFilteredTasks('')
+    setShowCompleted(false)
+  }
 
     return (
       <MainContainer>
-
         <ContentContainer>
+          <HeaderContainer>
+            <LogoutSingContainer>
+              <TouchableOpacity onPress={onLogout}>
+                <SvgXml xml={AppSvg.logoutSign} />
+              </TouchableOpacity>
+            </LogoutSingContainer>
 
-            <HeaderContainer>
+            <MainLogoContainer>
+              <SvgXml xml={AppSvg.mainLogo} />
+            </MainLogoContainer>
 
-              <LogoutSingContainer>
-                <TouchableOpacity onPress={onLogout}>
-                  <SvgXml xml={AppSvg.logoutSign}/>
-                </TouchableOpacity>
-              </LogoutSingContainer>
+            <SearchContainer>
+              <SearchInputContainer>
+                <AppInput inputType="default" placeholder="Pesquisar Tarefa" onChangeText={(text:string) => setSearchTask(text)}/>
+              </SearchInputContainer>
+              <SearchButtonContainer>
+                <AppButton buttonType="search" content="" onPress={searchTask ? () => setFilteredTasks(tasks.filter(item => item.todo.toLowerCase().includes(searchTask.toLowerCase()))) : null } />
+              </SearchButtonContainer>
+            </SearchContainer>
+          </HeaderContainer>
 
-              <MainLogoContainer>
-                <SvgXml xml={AppSvg.mainLogo}/>
-              </MainLogoContainer>
+          <TasksContainer>
+            <LoadingContentContainer>
+              <TaskCounterContainer>
+                <TaskCounterButton
+                  onPress={resetVisibility}
+                >
+                  <TaskCounterText>Tarefas Criadas</TaskCounterText>
+                  <TaskCounterMain>{tasksCounter}</TaskCounterMain>
+                </TaskCounterButton>
+                <TaskCounterButton onPress={() => setShowCompleted(true)}>
+                  <TaskCounterText>Concluídas</TaskCounterText>
+                  <TaskCounterCompleted>
+                    {tasksCompletedCounter}
+                  </TaskCounterCompleted>
+                </TaskCounterButton>
+              </TaskCounterContainer>
+              <GrayRectangle></GrayRectangle>
 
-              <SearchContainer>
-                <SearchInputContainer>
-                  <AppInput inputType="default" placeholder="Pesquisar Tarefa"/>
-                </SearchInputContainer>
-                <SearchButtonContainer>
-                  <AppButton buttonType="search" content=""/>
-                </SearchButtonContainer>
-              </SearchContainer>
-            </HeaderContainer>
+              <TaskListContainer>
+                <FlatList
+                  data={showCompleted ? tasksCompleted : filteredTasks? filteredTasks : tasks}
+                  renderItem={({ item }) => <TaskCard content={item.todo} />}
+                  keyExtractor={(item) => item.id}
+                  ListEmptyComponent={
+                    <ListEmptyContainer>
+                      <SvgXml xml={AppSvg.noItemsInserted} />
+                      <ListEmptyPrimaryText>
+                        Você ainda não tem tarefas cadastradas
+                      </ListEmptyPrimaryText>
+                      <ListtEmptySecondatyText>
+                        Crie tarefas e organize seus itens a fazer
+                      </ListtEmptySecondatyText>
+                    </ListEmptyContainer>
+                  }
+                />
+              </TaskListContainer>
 
-            <TasksContainer>
-
-              <LoadingContentContainer>
-                
-                  <TaskCounterContainer>
-                    <TaskCounterButton>
-                      <TaskCounterText>Tarefas Criadas</TaskCounterText>
-                      <TaskCounterMain>10</TaskCounterMain>
-                    </TaskCounterButton>
-                    <TaskCounterButton>
-                      <TaskCounterText>Concluídas</TaskCounterText>
-                      <TaskCounterCompleted>10</TaskCounterCompleted>
-                    </TaskCounterButton>
-                  </TaskCounterContainer>
-                    <GrayRectangle></GrayRectangle>
-
-                  <TaskListContainer>
-                    <FlatList
-                      data={DATA}
-                      renderItem={({item}) => <TaskCard content={item.task} />}
-                      keyExtractor={item => item.id}
-                      ListEmptyComponent={
-                        <ListEmptyContainer>
-                          <SvgXml xml={AppSvg.noItemsInserted}/>
-                          <ListEmptyPrimaryText>Você ainda não tem tarefas cadastradas</ListEmptyPrimaryText>
-                          <ListtEmptySecondatyText>Crie tarefas e organize seus itens a fazer</ListtEmptySecondatyText>
-                        </ListEmptyContainer>
-                      }
-                    />
-                  </TaskListContainer>
-                
-                
-                
-                  <CreateButtonContainer>
-                    <ButtonContainer>
-                      <AppButton buttonType="createTask" content="Criar"/>
-                    </ButtonContainer>
-                  </CreateButtonContainer>
-              </LoadingContentContainer>
-
-            </TasksContainer>
-            {/* <Link href="/">Back to login page</Link> */}
-        </ContentContainer> 
-
+              <CreateButtonContainer>
+                <ButtonContainer>
+                  <AppButton buttonType="createTask" content="Criar" />
+                </ButtonContainer>
+              </CreateButtonContainer>
+            </LoadingContentContainer>
+          </TasksContainer>
+        </ContentContainer>
       </MainContainer>
-    )
+    );
 }
