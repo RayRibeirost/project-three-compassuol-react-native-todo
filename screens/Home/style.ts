@@ -137,6 +137,7 @@ export const ListEmptyContainer = styled.View`
     align-items: center;
     gap: 1px;
 `;
+
 export const ListEmptyPrimaryText = styled.Text`
     font-family: Inter-SemiBold;
     font-size: 14px;
@@ -148,3 +149,56 @@ export const ListtEmptySecondatyText = styled.Text`
     font-size: 14px;
     color: ${colors.base.gray500};
 `;
+
+export const ModalOuterContainer = styled.View`
+    gap: 15px;
+`;
+export const ModalTitleContainer = styled.View`
+    width: 100%;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+`;
+export const ModalInputContainer = styled.View`
+    width: 100%;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+`;
+
+export const ModalInputInnerContainer = styled.View`
+    width: 79%;
+    height: auto;
+`;
+export const ModalInputButtonInnerContainer = styled.View`
+    width: 19%;
+    height: auto;
+`;
+
+export const ModalTodoTextContainer = styled.View`
+    width: 100%;
+`;
+
+export const ModalButtonsContainer = styled.View`
+    width: 100%;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 3px;
+`;
+
+export const ModalButtonInnerContainer = styled.View`
+    width:49%;
+`
+
+export const ModalTitleText = styled.Text`
+    font-family: Inter-SemiBold;
+    font-size: 14px;
+    color: ${colors.base.gray500};
+`;
+
+export const ModalTodoText = styled.Text`
+    font-family: Inter-SemiBold;
+    font-size: 12px;
+    color: ${colors.base.gray600};
+`

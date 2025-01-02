@@ -11,7 +11,7 @@ type Props = {
     isVisible: any | null ;
 }
 
-export default function AppButton ({buttonType, content, onPress, isVisible} : Props){
+export default function AppButton ({buttonType = "default", content, onPress, isVisible} : Props){
     if (buttonType === "default") {
         return (
             <MainContainer onPress={onPress}>
@@ -37,6 +37,13 @@ export default function AppButton ({buttonType, content, onPress, isVisible} : P
         return (
             <MainContainer onPress={onPress}>
                 <ButtonText>{content}</ButtonText>
+                <SvgXml xml={AppSvg.createSign} />
+            </MainContainer>
+        )
+    }
+    if (buttonType === "createOrEdit") {
+        return (
+            <MainContainer onPress={onPress}>
                 <SvgXml xml={AppSvg.createSign} />
             </MainContainer>
         )

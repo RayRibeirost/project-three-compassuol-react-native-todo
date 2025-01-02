@@ -1,21 +1,71 @@
-import { useEffect, useState } from "react";
-import { FlatList, TouchableOpacity } from "react-native";
+import { useEffect, 
+         useRef, 
+         useState } from "react";
+
+import { Text, 
+         View, 
+         FlatList, 
+         Modal, 
+         TouchableOpacity, 
+         ActivityIndicator } from "react-native";
+
+import { MainContainer, 
+         ContentContainer, 
+         HeaderContainer, 
+         LogoutSingContainer, 
+         MainLogoContainer, 
+         SearchContainer, 
+         SearchInputContainer, 
+         SearchButtonContainer, 
+         GrayRectangle, 
+         TasksContainer, 
+         LoadingContentContainer, 
+         TaskCounterContainer, 
+         TaskCounterButton, 
+         TaskCounterText, 
+         TaskCounterMain, 
+         TaskCounterCompleted, 
+         TaskListContainer, 
+         CreateButtonContainer, 
+         ButtonContainer, 
+         ListEmptyContainer, 
+         ListEmptyPrimaryText, 
+         ListtEmptySecondatyText, 
+         ModalOuterContainer, 
+         ModalTitleContainer,
+         ModalInputContainer,
+         ModalInputInnerContainer,
+         ModalInputButtonInnerContainer,
+         ModalButtonsContainer,
+         ModalButtonInnerContainer,
+         ModalTodoTextContainer,
+         ModalTodoText, 
+         ModalTitleText } from "./style";
+
+import { useAuth, 
+         getTasks, 
+         createTask, 
+         updateTask, 
+         toggleTaskCompleted, 
+         deleteTask } from "../../src/context/AuthContext";
+
+
 import { SvgXml } from "react-native-svg";
-import { AppSvg } from "../../src/constants/svg";
-import { MainContainer, ContentContainer, HeaderContainer, LogoutSingContainer, MainLogoContainer, SearchContainer, SearchInputContainer, SearchButtonContainer, GrayRectangle, TasksContainer, LoadingContentContainer, TaskCounterContainer, TaskCounterButton, TaskCounterText, TaskCounterMain, TaskCounterCompleted, TaskListContainer, CreateButtonContainer, ButtonContainer, ListEmptyContainer, ListEmptyPrimaryText, ListtEmptySecondatyText } from "./style";
-import { useAuth, getTasks, createTask, updateTask, toggleTaskCompleted, deleteTask } from "../../src/context/AuthContext";
+import { AppSvg } from "../../src/constants/svg";         
+import { colors } from "../../src/constants/colors";
+
 import AppButton from "../../src/components/Buttons";
 import AppInput from "../../src/components/Inputs";
 import TaskCard from "../../src/components/TaskCard";
+import AppModal from "../../src/components/Modals";
 
-const generateId = () => `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
 
-const isLoaded: boolean = false
-
-export default function Home() {
+export default function Home({modalChildren} : any) {
   const { onLogout } = useAuth();
 
-  const [tasks, setTasks] = useState([]);
+  const [isLoaded, setLoaded] = useState(false)
+
+  const [tasks, setTasks] = useState('');
 
   const [tasksCounter, setTaskCounter] = useState(0)
   const [tasksCompletedCounter, setTaskCompletedCounter] = useState(0);
@@ -26,7 +76,17 @@ export default function Home() {
   const [searchTask, setSearchTask] = useState('')
   const [filteredTasks, setFilteredTasks] = useState('')
 
+  const [isModalVisible, setModalVisible] = useState(false)
+  const [modalType, setModalType] = useState(null)
+
   let completedCounter = 0;
+
+  useEffect(() => {
+    setTimeout(() => {
+      loadTasks();
+      setLoaded(true)
+    }, 2000)
+  }, );
 
   const loadTasks = async () => {
     const data = await getTasks();
@@ -38,9 +98,6 @@ export default function Home() {
     setTaskCompletedCounter(completedCounter)
     setTaskCompleted(data.todos.filter(item => item.completed))
   }
-
-  useEffect(() => {loadTasks();
-  }, [])
 
   const handleToggleCompleted = async (id:number, completed: boolean) => {
     await toggleTaskCompleted(id, !completed)
@@ -56,6 +113,95 @@ export default function Home() {
     setFilteredTasks('')
     setShowCompleted(false)
   }
+
+  const apiModal = () => {
+    setModalVisible(true)
+    return (
+      <View>
+        <View>
+          <Text>ERRO</Text>
+        </View>
+        <View>
+          <Text>Erro ao receber dados da API.</Text>
+        </View>
+        <View>
+          <TouchableOpacity>
+            <Text>
+              Tentar novamente
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    );
+  }
+
+  const createModal = () => {
+    return (
+      <ModalOuterContainer>
+          <ModalTitleContainer>
+            <ModalTitleText>Nova Tarefa</ModalTitleText>
+            <TouchableOpacity onPress={() => setModalVisible(false)}>
+              <SvgXml xml={AppSvg.exitSign}/>
+            </TouchableOpacity>
+          </ModalTitleContainer>
+          <ModalInputContainer>
+            <ModalInputInnerContainer>
+              <AppInput inputType="modal" placeholder="Digitar nova tarefa"/>
+            </ModalInputInnerContainer>
+            <ModalInputButtonInnerContainer>
+              <AppButton buttonType="createOrEdit"/>
+            </ModalInputButtonInnerContainer>
+          </ModalInputContainer>
+      </ModalOuterContainer>
+     )
+  }
+
+  const editDeleteModal = (id:number, todo:string) => {
+    return (
+    <ModalOuterContainer>
+      <ModalTitleContainer>
+        <ModalTitleText>Tarefa: {id}</ModalTitleText>
+        <TouchableOpacity onPress={() => setModalVisible(false)}>
+            <SvgXml xml={AppSvg.exitSign}/>
+          </TouchableOpacity>
+      </ModalTitleContainer>
+      <ModalTodoTextContainer>
+        <ModalTodoText>
+          {todo}
+        </ModalTodoText>
+      </ModalTodoTextContainer>
+      <ModalButtonsContainer>
+        <ModalButtonInnerContainer>
+          <AppButton buttonType="default" content="Editar" onPress={() => setModalType(editModal(todo, id))}/>
+        </ModalButtonInnerContainer>
+        <ModalButtonInnerContainer>
+          <AppButton buttonType="default" content="Remover" onPress={() => {handleDeleteTask(id)}}/>
+        </ModalButtonInnerContainer>
+      </ModalButtonsContainer>
+    </ModalOuterContainer>
+  );
+  }
+
+  const editModal = (todo:string, id:number) => {
+    return (
+      <ModalOuterContainer>
+          <ModalTitleContainer>
+            <Text>Editar Tarefa</Text>
+            <TouchableOpacity onPress={() => setModalVisible(false)}>
+              <SvgXml xml={AppSvg.exitSign}/>
+            </TouchableOpacity>
+          </ModalTitleContainer>
+          <ModalInputContainer>
+            <ModalInputInnerContainer>
+              <AppInput inputType="modal" placeholder="Editar tarefa" value={todo}/>
+            </ModalInputInnerContainer>
+            <ModalInputButtonInnerContainer>
+              <AppButton buttonType="createOrEdit"/>
+            </ModalInputButtonInnerContainer>
+          </ModalInputContainer>
+      </ModalOuterContainer>
+     )
+  } 
 
     return (
       <MainContainer>
@@ -73,10 +219,30 @@ export default function Home() {
 
             <SearchContainer>
               <SearchInputContainer>
-                <AppInput inputType="default" placeholder="Pesquisar Tarefa" onChangeText={(text:string) => setSearchTask(text)}/>
+                <AppInput
+                  inputType="default"
+                  placeholder="Pesquisar Tarefa"
+                  onChangeText={(text: string) => setSearchTask(text)}
+                />
               </SearchInputContainer>
               <SearchButtonContainer>
-                <AppButton buttonType="search" content="" onPress={searchTask ? () => setFilteredTasks(tasks.filter(item => item.todo.toLowerCase().includes(searchTask.toLowerCase()))) : null } />
+                <AppButton
+                  buttonType="search"
+                  content=""
+                  onPress={
+                    searchTask
+                      ? () =>
+                        
+                          setFilteredTasks(
+                            tasks.filter((item) =>
+                              item.todo
+                                .toLowerCase()
+                                .includes(searchTask.toLowerCase())
+                            )
+                          )
+                      : null
+                  }
+                />
               </SearchButtonContainer>
             </SearchContainer>
           </HeaderContainer>
@@ -84,9 +250,7 @@ export default function Home() {
           <TasksContainer>
             <LoadingContentContainer>
               <TaskCounterContainer>
-                <TaskCounterButton
-                  onPress={resetVisibility}
-                >
+                <TaskCounterButton onPress={resetVisibility}>
                   <TaskCounterText>Tarefas Criadas</TaskCounterText>
                   <TaskCounterMain>{tasksCounter}</TaskCounterMain>
                 </TaskCounterButton>
@@ -100,9 +264,39 @@ export default function Home() {
               <GrayRectangle></GrayRectangle>
 
               <TaskListContainer>
-                <FlatList
-                  data={showCompleted ? tasksCompleted : filteredTasks? filteredTasks : tasks}
-                  renderItem={({ item }) => <TaskCard content={item.todo} />}
+                {isLoaded ? <FlatList
+                  data={
+                    showCompleted
+                      ? tasksCompleted
+                      : filteredTasks
+                      ? filteredTasks
+                      : tasks
+                  }
+                  renderItem={({ item }) => (
+                    <TaskCard
+                      content={item.todo}
+                      onPressCompleted={() =>
+                        handleToggleCompleted(item.id, item.completed)
+                      }
+                      onPressDelete={() => {setModalVisible(true); setModalType(editDeleteModal(item.id, item.todo))}}
+                      completedSvg={
+                        item.completed ? AppSvg.isChecked : AppSvg.isNotChecked
+                      }
+                      backgroundCardStyle={
+                        item.completed
+                          ? { backgroundColor: colors.base.gray100 }
+                          : { backgroundColor: colors.base.gray300 }
+                      }
+                      textCardStyle={
+                        item.completed
+                          ? {
+                              color: colors.base.gray500,
+                              textDecorationLine: "line-through",
+                            }
+                          : null
+                      }
+                    />
+                  )}
                   keyExtractor={(item) => item.id}
                   ListEmptyComponent={
                     <ListEmptyContainer>
@@ -115,17 +309,24 @@ export default function Home() {
                       </ListtEmptySecondatyText>
                     </ListEmptyContainer>
                   }
-                />
+                /> : 
+                <View style={{flex:1, justifyContent:"center", alignItems:"center"}}>
+                  <ActivityIndicator size={"large"} color={colors.principal.purpleDark}/>
+                </View>
+              }
+                
               </TaskListContainer>
 
               <CreateButtonContainer>
                 <ButtonContainer>
-                  <AppButton buttonType="createTask" content="Criar" />
+                  <AppButton buttonType="createTask" content="Criar" onPress={() => {setModalVisible(true); setModalType(createModal())}} />
                 </ButtonContainer>
               </CreateButtonContainer>
             </LoadingContentContainer>
           </TasksContainer>
         </ContentContainer>
+
+          <AppModal children={modalType} isActive={isModalVisible} />
       </MainContainer>
     );
 }

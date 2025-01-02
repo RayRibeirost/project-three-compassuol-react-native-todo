@@ -4,7 +4,6 @@ import { colors } from "../../constants/colors";
 export const MainContainer = styled.View`
     width: 100%;
     height: 75px; 
-    background-color: ${colors.base.gray300};
     border: 1px solid ${colors.base.gray400};
     border-radius: 10px;
     align-items: center;

@@ -6,24 +6,27 @@ import { MainContainer, ContentContainer, ContentText, ButtonContainer, TextCont
 
 type Props = {
     content : string;
+    onPressCompleted : any;
+    onPressDelete: any;
+    completedSvg: any;
+    backgroundCardStyle: any;
+    textCardStyle: any;
 }
 
-export default function TaskCard({content} : Props) {
+export default function TaskCard({content, onPressCompleted, onPressDelete, completedSvg, backgroundCardStyle, textCardStyle} : Props) {
     return (
-        <MainContainer>
-            <ContentContainer>
-                <ButtonContainer>
-                    <SvgXml xml={AppSvg.isNotChecked}/>
-                </ButtonContainer>
-                <TextContainer>
-                    <ContentText>
-                        {content}
-                    </ContentText>
-                </TextContainer>
-                <ButtonContainer>
-                    <SvgXml xml={AppSvg.trashSign}/>
-                </ButtonContainer>
-            </ContentContainer>
-        </MainContainer>
-    )
+      <MainContainer style={backgroundCardStyle}>
+        <ContentContainer>
+          <ButtonContainer onPress={onPressCompleted}>
+            <SvgXml xml={completedSvg} />
+          </ButtonContainer>
+          <TextContainer>
+            <ContentText style={textCardStyle}>{content}</ContentText>
+          </TextContainer>
+          <ButtonContainer onPress={onPressDelete}>
+            <SvgXml xml={AppSvg.trashSign} />
+          </ButtonContainer>
+        </ContentContainer>
+      </MainContainer>
+    );
 }

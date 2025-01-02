@@ -11,7 +11,7 @@ type Props = {
     borderStyle : any;
 }
 
-export default function AppInput({inputType, placeholder, onChangeText, value, secureTextEntry, borderStyle} : Props) {
+export default function AppInput({inputType = "default", placeholder, onChangeText, value, secureTextEntry, borderStyle} : Props) {
     if (inputType === "default") {
         return (
           <AppInputComponent
@@ -34,6 +34,19 @@ export default function AppInput({inputType, placeholder, onChangeText, value, s
             value={value}
             autoCapitalize="none"
             style={borderStyle}
+          />
+        );
+    }
+    if (inputType === "modal") {
+        return (
+          <AppInputComponent
+            placeholder={placeholder}
+            placeholderTextColor={colors.base.gray500}
+            secureTextEntry={secureTextEntry}
+            onChangeText={onChangeText}
+            value={value}
+            style={{height:"auto"}}
+            multiline={true}
           />
         );
     }

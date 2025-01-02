@@ -42,7 +42,11 @@ export const AuthProvider = ({children} : any) => {
         try {
             const result = await API_URL.post(`/login`, {username : username, password : password});
             
-            console.log(result)
+            console.log(
+                result.data.firstName, 
+                result.data.lastName, 
+                result.data.email
+            )
 
             setAuthState({
                 token: result.data.token,
@@ -79,23 +83,26 @@ export const AuthProvider = ({children} : any) => {
 }
 
 export const getTasks = async() => {
-    const response = await todos_api.get('/todos/');
+    const response = await todos_api.get('/todos?limit=15');
     return response.data
 }
 
 export const createTask = async(title:string) => {
-    const response = await todos_api.post('todo/add', {title});
+    const response = await todos_api.post('/todos/add', {title});
+    console.log(response)
     return response.data;
 }
 
 export const updateTask = async(id: number, title: string) => {
     const response = await todos_api.put(`/todos/${id}`, {title});
+    console.log(response)
     return response.data
 }
 
 export const toggleTaskCompleted = async (id:number, completed:boolean) => {
     const response = await todos_api.patch(`todos/${id}/completed`, {completed})
-    return response.data
+    console.log(response)
+    return response.data;
 }
 
 export const deleteTask = async(id: number) => {
