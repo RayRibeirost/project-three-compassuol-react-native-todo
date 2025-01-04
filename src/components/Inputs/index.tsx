@@ -1,4 +1,3 @@
-import { TextInput } from "react-native";
 import { AppInputComponent } from "./style";
 import { colors } from "../../constants/colors";
 
@@ -11,7 +10,14 @@ type Props = {
     borderStyle : any;
 }
 
-export default function AppInput({inputType = "default", placeholder, onChangeText, value, secureTextEntry, borderStyle} : Props) {
+export default function AppInput({
+  inputType, 
+  placeholder, 
+  onChangeText, 
+  value, 
+  secureTextEntry, 
+  borderStyle} : Props) {
+
     if (inputType === "default") {
         return (
           <AppInputComponent
@@ -50,4 +56,5 @@ export default function AppInput({inputType = "default", placeholder, onChangeTe
           />
         );
     }
+    
 }

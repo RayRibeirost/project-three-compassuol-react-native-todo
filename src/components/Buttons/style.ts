@@ -3,12 +3,12 @@ import { colors } from "../../constants/colors";
 
 export const MainContainer = styled.TouchableOpacity`
     flex-direction: row;
-    gap: 9px;
-    height: 52px;
-    width: 100%;
     justify-content : center;
     align-items: center;
+    gap: 9px;
     border-radius: 8px;
+    width: 100%;
+    height: 52px;
     background-color: ${colors.principal.purpleDark};
 `
 

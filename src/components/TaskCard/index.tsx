@@ -1,8 +1,10 @@
-import { View, Text, TouchableOpacity } from "react-native";
-import { useState, useEffect } from "react";
 import { SvgXml } from "react-native-svg";
 import { AppSvg } from "../../constants/svg";
-import { MainContainer, ContentContainer, ContentText, ButtonContainer, TextContainer } from "./style";
+import { MainContainer, 
+         ContentContainer, 
+         ContentText, 
+         ButtonContainer, 
+         TextContainer } from "./style";
 
 type Props = {
     content : string;
@@ -13,7 +15,14 @@ type Props = {
     textCardStyle: any;
 }
 
-export default function TaskCard({content, onPressCompleted, onPressDelete, completedSvg, backgroundCardStyle, textCardStyle} : Props) {
+export default function TaskCard({
+  content = "", 
+  onPressCompleted = null, 
+  onPressDelete = null, 
+  completedSvg = null, 
+  backgroundCardStyle = null, 
+  textCardStyle = null} : Props) {
+
     return (
       <MainContainer style={backgroundCardStyle}>
         <ContentContainer>
@@ -29,4 +38,5 @@ export default function TaskCard({content, onPressCompleted, onPressDelete, comp
         </ContentContainer>
       </MainContainer>
     );
+    
 }

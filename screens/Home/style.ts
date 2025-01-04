@@ -18,14 +18,14 @@ else if (height > 700) {
 
 export const MainContainer = styled.View`
     flex: 1;
-    jusitfy-content: center;
+    justify-content: space-around;
     align-items: center;
     background-color: ${colors.base.gray100};
 `;
 
 export const ContentContainer = styled.View`
-    width: 90%;
     align-items: center;
+    width: 90%;
 `;
 
 export const HeaderContainer = styled.View`
@@ -37,8 +37,8 @@ export const HeaderContainer = styled.View`
 `;
 
 export const LogoutSingContainer = styled.View`
-    width: 90%;
     align-items: flex-end;
+    width: 90%;
     margin-top: 40px;
     margin-bottom: 15px;
 `;
@@ -46,12 +46,12 @@ export const LogoutSingContainer = styled.View`
 export const MainLogoContainer = styled.View``;
 
 export const SearchContainer = styled.View`
+    position: absolute;
+    bottom: -23px;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
     width:90%;
-    position: absolute;
-    bottom: -23px;
 `;
 
 export const SearchInputContainer = styled.View`
@@ -63,16 +63,16 @@ export const SearchButtonContainer = styled.View`
 `;
 
 export const GrayRectangle = styled.View`
-    height: 1px;
     width: 100%;
-    background-color: ${colors.base.gray300};
+    height: 1px;
     margin-bottom: 10px;
     margin-top: 7px;
+    background-color: ${colors.base.gray300};
 `
 
 export const TasksContainer =  styled.View`
-    margin-top: 40px;
     width: 100%;
+    margin-top: 40px;
 `;
 
 export const LoadingContentContainer = styled.View`
@@ -97,21 +97,21 @@ export const TaskCounterText = styled.Text`
 `;
 
 export const TaskCounterMain = styled.Text`
+    padding: 1px 7px;
+    border-radius: 10px;
     font-family: Inter-Bold;
     font-size: 14px;
     color: ${colors.principal.purpleDark};
     background-color: ${colors.principal.purpleLight};
-    padding: 1px 7px;
-    border-radius: 10px;
 `;
 
 export const TaskCounterCompleted = styled.Text`
+    padding: 1px 7px;
+    border-radius: 10px;
     font-family: Inter-Bold;
     font-size: 14px;
     color: ${colors.principal.greenDark};
     background-color: ${colors.principal.greenLight};
-    padding: 1px 7px;
-    border-radius: 10px;
 `;
 
 export const TaskListContainer = styled.View`
@@ -132,17 +132,17 @@ export const ButtonContainer = styled.View`
 `;
 
 export const ListEmptyContainer = styled.View`
-    margin-top: 30px;
     justify-content: center;
     align-items: center;
     gap: 1px;
+    margin-top: 30px;
 `;
 
 export const ListEmptyPrimaryText = styled.Text`
+    margin-top: 20px;
     font-family: Inter-SemiBold;
     font-size: 14px;
     color: ${colors.base.gray500};
-    margin-top: 20px;
 `;
 export const ListtEmptySecondatyText = styled.Text`
     font-family: Inter-Regular;
@@ -150,55 +150,4 @@ export const ListtEmptySecondatyText = styled.Text`
     color: ${colors.base.gray500};
 `;
 
-export const ModalOuterContainer = styled.View`
-    gap: 15px;
-`;
-export const ModalTitleContainer = styled.View`
-    width: 100%;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-`;
-export const ModalInputContainer = styled.View`
-    width: 100%;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-`;
 
-export const ModalInputInnerContainer = styled.View`
-    width: 79%;
-    height: auto;
-`;
-export const ModalInputButtonInnerContainer = styled.View`
-    width: 19%;
-    height: auto;
-`;
-
-export const ModalTodoTextContainer = styled.View`
-    width: 100%;
-`;
-
-export const ModalButtonsContainer = styled.View`
-    width: 100%;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    gap: 3px;
-`;
-
-export const ModalButtonInnerContainer = styled.View`
-    width:49%;
-`
-
-export const ModalTitleText = styled.Text`
-    font-family: Inter-SemiBold;
-    font-size: 14px;
-    color: ${colors.base.gray500};
-`;
-
-export const ModalTodoText = styled.Text`
-    font-family: Inter-SemiBold;
-    font-size: 12px;
-    color: ${colors.base.gray600};
-`

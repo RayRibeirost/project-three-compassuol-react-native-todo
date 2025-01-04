@@ -3,29 +3,29 @@ import { colors } from "../../src/constants/colors";
 
 
 export const MainContainer = styled.View`
-    height: 100%;
-    width: 100%;
-    jusitfy-content: center;
+    justify-content: center;
     align-items: center;
+    width: 100%;
+    height: 100%;
     background-color: ${colors.base.gray100}
 `
 export const ContentContainer = styled.View`
-    width: 90%;
-    height: 100%;
     justify-content: center;
     align-items: center;
+    width: 90%;
+    height: 100%;
 `
 
 export const SvgContainer = styled.View`
-    width: 100%;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
+    width: 100%;
     margin-bottom: 30px;
 `;
 
 export const FormContainer = styled.View`
-    width: 100%;
     align-items: center;
+    width: 100%;
     margin-top: 30px;
 `
 

@@ -1,8 +1,7 @@
-import { View, Text, TouchableOpacity } from "react-native";
-import { useState, useEffect } from "react";
 import { SvgXml } from "react-native-svg";
 import { AppSvg } from "../../constants/svg";
-import { MainContainer, ButtonText } from "./style";
+import { MainContainer, 
+         ButtonText } from "./style";
 
 type Props = {
     content : string | null;
@@ -11,7 +10,12 @@ type Props = {
     isVisible: any | null ;
 }
 
-export default function AppButton ({buttonType = "default", content, onPress, isVisible} : Props){
+export default function AppButton ({
+    buttonType = "default", 
+    content = "", 
+    onPress = null, 
+    isVisible = null} : Props){
+
     if (buttonType === "default") {
         return (
             <MainContainer onPress={onPress}>
@@ -48,4 +52,5 @@ export default function AppButton ({buttonType = "default", content, onPress, is
             </MainContainer>
         )
     }
+    
 }

@@ -2,22 +2,21 @@ import { styled } from "styled-components/native";
 import { colors } from "../../constants/colors";
 
 export const MainContainer = styled.View`
-    width: 100%;
-    height: 75px; 
-    border: 1px solid ${colors.base.gray400};
-    border-radius: 10px;
     align-items: center;
     justify-content: center;
+    border: 1px solid ${colors.base.gray400};
+    border-radius: 10px;
     margin-bottom: 10px;
+    width: 100%;
+    height: 75px; 
 `;
 
 export const ContentContainer = styled.View`
-    width: 90%;
-    height: 90%;
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    
+    width: 90%;
+    height: 90%; 
 `;
 
 export const ButtonContainer = styled.TouchableOpacity`

@@ -1,38 +1,59 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import axios from "axios";
-import * as SecureStore from 'expo-secure-store';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 
 interface AuthProps {
-    authState?: {token : string | null; authenticated: boolean | null};
+    authState?: {token: string | null; authenticated: boolean | null};
     onLogin?: (username: string, password: string) => Promise<any>;
-    onLogout?: () => Promise<any>;
+    onLogout?: () => any;
 }
 
-const TOKEN_KEY = 'my-jwt';
-export const API_URL = axios.create({ baseURL: "https://dummyjson.com/users" });
-export const todos_api = axios.create({ baseURL: "https://dummyjson.com" });
-const AuthContext = createContext<AuthProps>({})
+const tokenKey = 'my-jwt';
+export const api = axios.create({ baseURL: "https://dummyjson.com/" });
 
-export const useAuth = () => {
-    return useContext(AuthContext)
-}
+export const GlobalContext = createContext<AuthProps>({})
 
-export const AuthProvider = ({children} : any) => {
+export const GlobalProvider = ({children} : any) => {
+    
     const [authState, setAuthState] = useState<{token : string | null; authenticated: boolean | null}>({
         token : null, 
         authenticated : null,
     })
 
+    const tokenValidation = async (token: string) => {
+        try {
+            const response = await api.get(`/auth/me`, {
+                headers : {Authorization : `Bearer ${token}`}
+            })
+            return response.data
+        } catch(error) {
+            console.error("Invalid Token", error)
+            return false
+        }
+    }
+
+
     useEffect(() => {
         const loadToken = async () => {
-            const token = await SecureStore.getItemAsync(TOKEN_KEY)
-            console.log(token)
-            if (token) {
-              axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-                setAuthState({
-                    token: token,
-                    authenticated: true
-                })  
+            try {
+                const token = await AsyncStorage.getItem(tokenKey)
+                if (token) {
+                    const validToken = await tokenValidation(token);
+                    if (validToken) {
+                        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+
+                        setAuthState({
+                            token: token,
+                            authenticated: true
+                        })  
+
+                    } else {
+                        await AsyncStorage.removeItem(tokenKey)
+                    }
+                }
+            } catch(error) {
+                console.error("Loading token error", error)
             }
         }
         loadToken ();
@@ -40,71 +61,75 @@ export const AuthProvider = ({children} : any) => {
 
     const login = async (username: string, password: string) => {
         try {
-            const result = await API_URL.post(`/login`, {username : username, password : password});
-            
-            console.log(
-                result.data.firstName, 
-                result.data.lastName, 
-                result.data.email
-            )
+            const response = await api.post(`/auth/login`, {username : username, password : password});
 
             setAuthState({
-                token: result.data.token,
-                authenticated: true
-            })
+            token: response.data.accessToken,  
+            authenticated: true         
+            });
 
-            axios.defaults.headers.common['Authorization'] = `Bearer ${result.data.msg}`
+            axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.accessToken}`;
+            await AsyncStorage.setItem(tokenKey, response.data.accessToken);
+            return response;
 
-            await SecureStore.setItemAsync(TOKEN_KEY, result.data.token)
-
-            return result;
-        } catch (e) {
-            return {error: true, msg: (e as any).response.data.msg}
+        } catch (e: any) {
+            console.error("Login Error", e)
+            return {error: true, msg: e.response?.data?.msg || "unknown error"}
         }
     }
+    
+    
 
     const logout = async () => {
-        await SecureStore.deleteItemAsync(TOKEN_KEY)
-        axios.defaults.headers.common['Authorization'] = '';
+        await AsyncStorage.removeItem(tokenKey)
+        axios.defaults.headers.common['Authorization'] = '';        
         setAuthState({
-            token: null,
-            authenticated: null
-        })
+            token: null,  
+            authenticated: null         
+            });
     }
-
+    
+    const getTasks = async() => {
+        const response = await api.get('/todos');
+        return response.data
+    }
+    
+    const createTask = async(title:string) => {
+        console.log(`Task "${title}" created`)
+        const response = await api.post('/todos/add', {title});
+        console.log(response.data)
+        return response.data;
+    }
+    
+    const updateTask = async(id: number, title: string) => {
+        console.log(`Task ${id} updated to ${title}`)
+        const response = await api.put(`/todos/${id}`, {title});
+        console.log(response.data)
+        return response.data
+    }
+    
+    const toggleTaskCompleted = async (id:number, completed:boolean) => {
+        console.log(`Task ${id} toggled to ${completed}`)
+        const response = await api.put(`/todos/${id}/completed`, {completed})
+        console.log(response.data)
+        return response.data;
+    }
+    
+    const deleteTask = async(id: number) => {
+        console.log(`Task ${id} deleted`)
+        await api.delete(`/todos/${id}`)
+    }
+    
     const value = {
         onLogin: login,
         onLogout: logout,
+        getTasks : getTasks,
+        createTask : createTask,
+        updateTask : updateTask,
+        toggleTaskCompleted : toggleTaskCompleted,
+        deleteTask : deleteTask,
         authState
-
     };
 
-    return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
-}
-
-export const getTasks = async() => {
-    const response = await todos_api.get('/todos?limit=15');
-    return response.data
-}
-
-export const createTask = async(title:string) => {
-    const response = await todos_api.post('/todos/add', {title});
-    console.log(response)
-    return response.data;
-}
-
-export const updateTask = async(id: number, title: string) => {
-    const response = await todos_api.put(`/todos/${id}`, {title});
-    console.log(response)
-    return response.data
-}
-
-export const toggleTaskCompleted = async (id:number, completed:boolean) => {
-    const response = await todos_api.patch(`todos/${id}/completed`, {completed})
-    console.log(response)
-    return response.data;
-}
-
-export const deleteTask = async(id: number) => {
-    await todos_api.delete(`/todos/${id}`)
+    return <GlobalContext.Provider value={value}>{children}</GlobalContext.Provider>
 }

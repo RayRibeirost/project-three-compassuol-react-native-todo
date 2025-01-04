@@ -1,9 +1,9 @@
 import * as SplashScreen from 'expo-splash-screen'
-import { useEffect } from 'react';
+import { useContext, useEffect } from 'react';
 import { useFonts } from 'expo-font';
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { NavigationContainer } from '@react-navigation/native';
-import { AuthProvider, useAuth } from './src/context/AuthContext';
+import { GlobalContext, GlobalProvider } from './src/context/AuthContext';
 import Login from './screens/Login';
 import Home from './screens/Home';
 
@@ -21,7 +21,7 @@ export default function App() {
     
       useEffect(() => {
         if (fontsLoaded || error) {
-          setTimeout(SplashScreen.hideAsync, 1500);
+          setTimeout(SplashScreen.hideAsync, 1000);
         }
       }, [fontsLoaded, error])
     
@@ -30,18 +30,18 @@ export default function App() {
       }
 
       return (
-          <AuthProvider>
+          <GlobalProvider>
             <Layout></Layout>
-          </AuthProvider>
+          </GlobalProvider>
       )
 }
 
 export const Layout = () => {
-  const {authState} = useAuth()
+  const { authState } = useContext(GlobalContext)
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{headerShown: false}}>
-        { authState?.authenticated ? (
+        {authState?.authenticated ? (
           <Stack.Screen 
             name="home"
             component={Home}
