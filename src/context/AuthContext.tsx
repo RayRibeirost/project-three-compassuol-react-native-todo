@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -6,7 +6,12 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 interface AuthProps {
     authState?: {token: string | null; authenticated: boolean | null};
     onLogin?: (username: string, password: string) => Promise<any>;
-    onLogout?: () => any;
+    onLogout?: () => void;
+    getTasks : () => Promise<any>;
+    createTask: (title : string) => Promise<any>;
+    updateTask: (id : number | string, title: string) => Promise<any>;
+    toggleTaskCompleted: (id : number | string, completed: boolean) => Promise<any>;
+    deleteTask: (id: number | string) => Promise<any> ;
 }
 
 const tokenKey = 'my-jwt';
@@ -101,21 +106,21 @@ export const GlobalProvider = ({children} : any) => {
         return response.data;
     }
     
-    const updateTask = async(id: number, title: string) => {
+    const updateTask = async(id: number | string, title: string) => {
         console.log(`Task ${id} updated to ${title}`)
         const response = await api.put(`/todos/${id}`, {title});
         console.log(response.data)
         return response.data
     }
     
-    const toggleTaskCompleted = async (id:number, completed:boolean) => {
+    const toggleTaskCompleted = async (id:number | string, completed:boolean) => {
         console.log(`Task ${id} toggled to ${completed}`)
         const response = await api.put(`/todos/${id}/completed`, {completed})
         console.log(response.data)
         return response.data;
     }
     
-    const deleteTask = async(id: number) => {
+    const deleteTask = async(id: number | string) => {
         console.log(`Task ${id} deleted`)
         await api.delete(`/todos/${id}`)
     }

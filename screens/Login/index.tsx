@@ -23,11 +23,11 @@ import AppInput from '../../src/components/Inputs';
 
 export default function Login() {
 
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
   const {onLogin} = useContext(GlobalContext)
-  const [errorLogin, setErrorLogin] = useState(false)
-  const [showPassword, setShowPassword] = useState(true)
+  const [errorLogin, setErrorLogin] = useState<boolean>(false)
+  const [showPassword, setShowPassword] = useState<boolean>(true)
 
 
   const login = async () => {

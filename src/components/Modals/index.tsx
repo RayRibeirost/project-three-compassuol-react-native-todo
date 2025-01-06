@@ -20,15 +20,15 @@ import AppInput from "../Inputs";
 type Props = {
   modalType : string | null;
   isActive: boolean;
-  onPressExit?: () => {};
-  onChangeText?: () => {};
-  value?: string | undefined;
-  onPressCreateOrEdit?: () => {};
-  taskId?: string | number;
+  onPressExit?: () => void;
+  onChangeText?: any;
+  value?: any;
+  onPressCreateOrEdit?: () => void;
+  taskId?: string | number | null | undefined;
   taskTodo?: string;
-  setToEdit?: () => {};
-  removeTask?: () => {};
-  onPressReload?: () => {};
+  setToEdit?: () => void;
+  removeTask?: () => void;
+  onPressReload?: () => void;
 };
 
 export default function AppModal({

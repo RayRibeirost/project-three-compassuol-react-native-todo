@@ -8,8 +8,8 @@ import { MainContainer,
 
 type Props = {
     content : string;
-    onPressCompleted : any;
-    onPressDelete: any;
+    onPressCompleted : () => Promise<void> | null;
+    onPressDelete: () => void | null;
     completedSvg: any;
     backgroundCardStyle: any;
     textCardStyle: any;
@@ -17,11 +17,11 @@ type Props = {
 
 export default function TaskCard({
   content = "", 
-  onPressCompleted = null, 
-  onPressDelete = null, 
-  completedSvg = null, 
-  backgroundCardStyle = null, 
-  textCardStyle = null} : Props) {
+  onPressCompleted, 
+  onPressDelete, 
+  completedSvg, 
+  backgroundCardStyle, 
+  textCardStyle} : Props) {
 
     return (
       <MainContainer style={backgroundCardStyle}>

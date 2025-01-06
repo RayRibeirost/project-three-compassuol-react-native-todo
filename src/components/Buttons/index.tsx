@@ -4,10 +4,10 @@ import { MainContainer,
          ButtonText } from "./style";
 
 type Props = {
-    content : string | null;
-    buttonType : string;
-    onPress: any;
-    isVisible: any | null ;
+    content? : string | null;
+    buttonType? : string;
+    onPress?: any;
+    isVisible?: any | null ;
 }
 
 export default function AppButton ({

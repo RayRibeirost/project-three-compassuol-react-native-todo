@@ -2,12 +2,12 @@ import { AppInputComponent } from "./style";
 import { colors } from "../../constants/colors";
 
 type Props = {
-    inputType : string;
-    placeholder: string;
-    onChangeText: any;
-    value:string;
-    secureTextEntry: boolean;
-    borderStyle : any;
+    inputType? : string;
+    placeholder?: string;
+    onChangeText?: (text : string) => void;
+    value? :any;
+    secureTextEntry? : boolean;
+    borderStyle? : any;
 }
 
 export default function AppInput({

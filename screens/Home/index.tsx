@@ -2,8 +2,7 @@ import { useContext,
          useEffect,  
          useState } from "react";
 
-import { Text, 
-         View, 
+import { View, 
          FlatList, 
          TouchableOpacity, 
          ActivityIndicator } from "react-native";
@@ -53,30 +52,30 @@ export default function Home() {
           createTask, 
           updateTask } = useContext(GlobalContext);
   
-  const [isLoaded, setLoaded] = useState(false)
+  const [isLoaded, setLoaded] = useState<boolean | null>(false)
   
-  const [tasks, setTasks] = useState('');
+  const [tasks, setTasks] = useState<any>('');
   
-  const [tasksCounter, setTaskCounter] = useState(0)
-  const [tasksCompletedCounter, setTaskCompletedCounter] = useState(0);
+  const [tasksCounter, setTaskCounter] = useState<number>(0)
+  const [tasksCompletedCounter, setTaskCompletedCounter] = useState<number>(0);
   
-  const [showCompleted, setShowCompleted] = useState(false)
-  const [tasksCompleted, setTaskCompleted] = useState([])
+  const [showCompleted, setShowCompleted] = useState<boolean>(false)
+  const [tasksCompleted, setTaskCompleted] = useState<any>([])
   
-  const [searchTask, setSearchTask] = useState('')
-  const [filteredTasks, setFilteredTasks] = useState('')
+  const [searchTask, setSearchTask] = useState<string | null>('')
+  const [filteredTasks, setFilteredTasks] = useState<string | null>('')
   
-  const [isModalVisible, setModalVisible] = useState(false)
-  const [modalType, setModalType] = useState("")
+  const [isModalVisible, setModalVisible] = useState<boolean>(false)
+  const [modalType, setModalType] = useState<string | null>("")
   
-  const [editModalText, setEditModalText] = useState('')
-  const [createModalText, setCreateModalText] = useState('')
+  const [editModalText, setEditModalText] = useState<string>('')
+  const [createModalText, setCreateModalText] = useState<string>('')
 
-  const [idForModal, setIdForModal] = useState('')
-  const [todoForModal, setTodoForModal] = useState('')
+  const [idForModal, setIdForModal] = useState<number | string>('')
+  const [todoForModal, setTodoForModal] = useState<string>('')
 
 
-  let completedCounter = 0;
+  let completedCounter : number = 0;
 
   useEffect(() => {
     setTimeout(() => {
@@ -87,13 +86,13 @@ export default function Home() {
 
   const loadTasks = async () => {
     const data = await getTasks();
-    setTasks(data.todos.sort((a, b) => (a.completed === b.completed ? 0 : a.completed ? 1 : -1)))
+    setTasks(data.todos.sort((a : any, b: any) => (a.completed === b.completed ? 0 : a.completed ? 1 : -1)))
 
     setTaskCounter(data.todos.length)
-    data.todos.forEach(item => {item.completed ? completedCounter +=1 : completedCounter += 0})
+    data.todos.forEach((item : any) => {item.completed ? completedCounter +=1 : completedCounter += 0})
 
     setTaskCompletedCounter(completedCounter)
-    setTaskCompleted(data.todos.filter(item => item.completed))
+    setTaskCompleted(data.todos.filter((item : any) => item.completed))
   };
 
   const handleToggleCompleted = async (id:number, completed: boolean) => {
@@ -139,7 +138,7 @@ export default function Home() {
     setModalVisible(true);
     setModalType("editOrDelete");
     setEditModalText(todo)
-    setCreateModalText(null)
+    setCreateModalText("")
     setIdForModal(id)
     setTodoForModal(todo)
 
@@ -197,7 +196,7 @@ export default function Home() {
                   buttonType="search"
                   content=""
                   onPress={searchTask? 
-                    () => setFilteredTasks(tasks.filter((item) => item.todo.toLowerCase().includes(searchTask.toLowerCase()))): 
+                    () => setFilteredTasks(tasks.filter((item : any) => item.todo.toLowerCase().includes(searchTask.toLowerCase()))): 
                     null}
                 />
               </SearchButtonContainer>
