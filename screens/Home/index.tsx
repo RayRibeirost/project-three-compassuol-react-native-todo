@@ -80,19 +80,25 @@ export default function Home() {
   useEffect(() => {
     setTimeout(() => {
       loadTasks();
-      setLoaded(true)
-    }, 2000)
+    }, 1000)
   }, []);
 
   const loadTasks = async () => {
-    const data = await getTasks();
-    setTasks(data.todos.sort((a : any, b: any) => (a.completed === b.completed ? 0 : a.completed ? 1 : -1)))
+    const data : any = await getTasks();
+    if (data) {
+      setTasks(data.todos.sort((a : any, b: any) => (a.completed === b.completed ? 0 : a.completed ? 1 : -1)))
 
-    setTaskCounter(data.todos.length)
-    data.todos.forEach((item : any) => {item.completed ? completedCounter +=1 : completedCounter += 0})
+      setTaskCounter(data.todos.length)
+      data.todos.forEach((item : any) => {item.completed ? completedCounter +=1 : completedCounter += 0})
 
-    setTaskCompletedCounter(completedCounter)
-    setTaskCompleted(data.todos.filter((item : any) => item.completed))
+      setTaskCompletedCounter(completedCounter)
+      setTaskCompleted(data.todos.filter((item : any) => item.completed))
+      setLoaded(true)
+    } else {
+      setModalType("error")
+      setModalVisible(true)
+    }
+    
   };
 
   const handleToggleCompleted = async (id:number, completed: boolean) => {
@@ -141,7 +147,6 @@ export default function Home() {
     setCreateModalText("")
     setIdForModal(id)
     setTodoForModal(todo)
-
   }
 
   const editModalHandler = () => {
@@ -161,6 +166,15 @@ export default function Home() {
   const updateTaskHandler = (id : number | string, title : string) => {
     handleUpdateTask(id, title)
     resetModalState();
+  }
+
+  const reloadTasksHandler = () => {
+    loadTasks();
+    if (isLoaded) {
+      setModalVisible(false);
+    } else {
+      setModalVisible(true);
+    }
   }
 
   
@@ -196,7 +210,9 @@ export default function Home() {
                   buttonType="search"
                   content=""
                   onPress={searchTask? 
-                    () => setFilteredTasks(tasks.filter((item : any) => item.todo.toLowerCase().includes(searchTask.toLowerCase()))): 
+                    () => {
+                      resetVisibility();
+                      setFilteredTasks(tasks.filter((item : any) => item.todo.toLowerCase().includes(searchTask.toLowerCase())))}: 
                     null}
                 />
               </SearchButtonContainer>
@@ -222,7 +238,7 @@ export default function Home() {
               <GrayRectangle></GrayRectangle>
 
               <TaskListContainer>
-                {isLoaded ? 
+                {isLoaded? 
                   <FlatList 
                     data={showCompleted? 
                       tasksCompleted : 
@@ -257,7 +273,7 @@ export default function Home() {
                         </ListtEmptySecondatyText>
                       </ListEmptyContainer>
                     }
-                /> : 
+                /> :  
                 <View 
                   style={{flex:1, justifyContent:"center", alignItems:"center"}}>
                   <ActivityIndicator 
@@ -291,7 +307,7 @@ export default function Home() {
             taskTodo={todoForModal}
             setToEdit={() => editModalHandler()}
             removeTask={() => removeModalHandler(idForModal)}
-            onPressReload={() => loadTasks()}
+            onPressReload={reloadTasksHandler}
              />
       </MainContainer>
     );

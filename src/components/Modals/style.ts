@@ -69,3 +69,38 @@ export const ModalTodoText = styled.Text`
     font-size: 12px;
     color: ${colors.base.gray600};
 `
+
+export const ErrorModalMainContainer = styled.View`
+    justify-content: center;
+    align-items: center;
+    gap: 28px;
+    margin: 15px auto;
+    width: 100%;
+`;
+export const ErrorTextContainer = styled.View``;
+export const ErrorText = styled.Text`
+    font-family: Inter-SemiBold;
+    font-size: 14px;
+    color: ${colors.base.gray500};
+`;
+export const ErroInfoContainer = styled.View``;
+export const ErrorInfoText = styled.Text`
+    font-family: Inter-Regular;
+    font-size: 16px;
+    color: ${colors.base.gray500};
+`;
+export const ReloadButtonContainer = styled.View`
+    width: 90%
+`;
+
+export const ReloadButton = styled.TouchableOpacity`
+    flex-direction: row;
+    justify-content: flex-end;
+    width:100%;
+`;
+
+export const ReloadButtonText = styled.Text`
+    font-family: Inter-SemiBold;
+    font-size: 14px;
+    color: ${colors.base.gray500};
+`;

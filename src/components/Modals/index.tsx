@@ -12,7 +12,15 @@ import { ForeContainer,
          ModalButtonInnerContainer,
          ModalTodoTextContainer,
          ModalTodoText, 
-         ModalTitleText  } from "./style";
+         ModalTitleText,
+         ErrorModalMainContainer,
+         ErrorTextContainer,
+         ErrorText,
+         ErroInfoContainer,
+         ErrorInfoText,
+         ReloadButtonContainer,
+         ReloadButton,
+         ReloadButtonText, } from "./style";
 
 import AppButton from "../Buttons";
 import AppInput from "../Inputs";
@@ -173,21 +181,21 @@ export default function AppModal({
         >
         <ForeContainer>
           <InnerContainer>
-            <View>
-              <View>
-                <Text>ERRO</Text>
-              </View>
-              <View>
-                <Text>Erro ao receber dados da API.</Text>
-              </View>
-              <View>
-                <TouchableOpacity onPress={onPressReload}>
-                  <Text>
+            <ErrorModalMainContainer>
+              <ErrorTextContainer>
+                <ErrorText>ERRO</ErrorText>
+              </ErrorTextContainer>
+              <ErroInfoContainer>
+                <ErrorInfoText>Erro ao receber dados da API.</ErrorInfoText>
+              </ErroInfoContainer>
+              <ReloadButtonContainer>
+                <ReloadButton onPress={onPressReload}>
+                  <ReloadButtonText>
                     Tentar novamente
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            </View>
+                  </ReloadButtonText>
+                </ReloadButton>
+              </ReloadButtonContainer>
+            </ErrorModalMainContainer>
           </InnerContainer>
         </ForeContainer>
       </Modal>

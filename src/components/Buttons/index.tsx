@@ -7,7 +7,7 @@ type Props = {
     content? : string | null;
     buttonType? : string;
     onPress?: any;
-    isVisible?: any | null ;
+    isVisible?: any | null;
 }
 
 export default function AppButton ({
