@@ -1,0 +1,9 @@
+{
+  "todos": [
+    {
+      "id": "2",
+      "todo": "Fazer exercicios na praia",
+      "completed": true
+    }
+  ]
+}
