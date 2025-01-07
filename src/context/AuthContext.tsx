@@ -8,7 +8,7 @@ interface AuthProps {
     onLogin?: (username: string, password: string) => Promise<any>;
     onLogout?: () => void;
     getTasks : () => Promise<any>;
-    createTask: (title : string) => Promise<any>;
+    createTask: (id: string, todo : string, completed : boolean) => Promise<any>;
     updateTask: (id : number | string, title: string) => Promise<any>;
     toggleTaskCompleted: (id : number | string, completed: boolean) => Promise<any>;
     deleteTask: (id: number | string) => Promise<any> ;
@@ -16,6 +16,7 @@ interface AuthProps {
 
 const tokenKey = 'my-jwt';
 export const api = axios.create({ baseURL: "https://dummyjson.com/" });
+export const todosApi = axios.create({ baseURL: "http://10.0.2.2:3000" });
 
 export const GlobalContext = createContext<AuthProps>({})
 
@@ -95,34 +96,37 @@ export const GlobalProvider = ({children} : any) => {
     }
     
     const getTasks = async() => {
-        const response = await api.get('/todos');
-        return response.data
+        try {
+            const response = await todosApi.get('/todos');
+            console.log('Todos obtained:', response.data);
+            return response.data;
+            } catch (error) {
+            console.error('Data Error:', error);
+        }
     }
     
-    const createTask = async(title:string) => {
-        console.log(`Task "${title}" created`)
-        const response = await api.post('/todos/add', {title});
+    const createTask = async(id: string, todo : string, completed : boolean) => {
+        const response = await todosApi.post('/todos', {id : id, todo : todo, completed : completed});
         console.log(response.data)
         return response.data;
     }
     
-    const updateTask = async(id: number | string, title: string) => {
-        console.log(`Task ${id} updated to ${title}`)
-        const response = await api.put(`/todos/${id}`, {title});
+    const updateTask = async(id: number | string, todo: string) => {
+        const response = await todosApi.patch(`/todos/${id}` , {todo : todo});
         console.log(response.data)
         return response.data
     }
     
     const toggleTaskCompleted = async (id:number | string, completed:boolean) => {
         console.log(`Task ${id} toggled to ${completed}`)
-        const response = await api.put(`/todos/${id}/completed`, {completed})
+        const response = await todosApi.patch(`/todos/${id}`, {completed : completed})
         console.log(response.data)
         return response.data;
     }
     
     const deleteTask = async(id: number | string) => {
         console.log(`Task ${id} deleted`)
-        await api.delete(`/todos/${id}`)
+        await todosApi.delete(`/todos/${id}`)
     }
     
     const value = {

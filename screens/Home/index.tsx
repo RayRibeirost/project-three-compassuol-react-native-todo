@@ -74,8 +74,11 @@ export default function Home() {
   const [idForModal, setIdForModal] = useState<number | string>('')
   const [todoForModal, setTodoForModal] = useState<string>('')
 
+  const [tasksCreated, setTasksCreated] = useState<number>(0)
 
   let completedCounter : number = 0;
+  
+  
 
   useEffect(() => {
     setTimeout(() => {
@@ -86,13 +89,18 @@ export default function Home() {
   const loadTasks = async () => {
     const data : any = await getTasks();
     if (data) {
-      setTasks(data.todos.sort((a : any, b: any) => (a.completed === b.completed ? 0 : a.completed ? 1 : -1)))
-
-      setTaskCounter(data.todos.length)
-      data.todos.forEach((item : any) => {item.completed ? completedCounter +=1 : completedCounter += 0})
-
+      setTasks(data.sort((a : any, b: any) => (a.completed === b.completed ? 0 : a.completed ? 1 : -1)))
+      setTaskCounter(data.length)
+      data.forEach((item : any) => {item.completed ? completedCounter +=1 : completedCounter += 0})
       setTaskCompletedCounter(completedCounter)
-      setTaskCompleted(data.todos.filter((item : any) => item.completed))
+      setTaskCompleted(data.filter((item : any) => item.completed))
+
+
+      const idArray : any[] = [] 
+      data.forEach((item : any) => idArray.push(Number(item.id)))
+      const maxSpread = Math.max(...idArray) + 1
+      setTasksCreated(idArray.length > 0 ? maxSpread : 1)
+
       setLoaded(true)
     } else {
       setModalType("error")
@@ -111,8 +119,9 @@ export default function Home() {
     loadTasks();
   };
 
-  const handleCreateTask = async (title : string) => {
-    await createTask(title)
+  const handleCreateTask = async (id : string, todo : string, completed : boolean) => {
+    loadTasks()
+    await createTask(id, todo, completed)
     loadTasks()
   }
 
@@ -158,8 +167,10 @@ export default function Home() {
     resetModalState();
   }
 
-  const createTaskHandler = (title : string) => {
-    handleCreateTask(title)
+  const createTaskHandler = (id : string , todo : string, completed :  boolean) => {
+    console.log(id, todo, completed);
+    handleCreateTask(id, todo, completed);
+    setTasksCreated(tasksCreated + 1)
     resetModalState();
   }
 
@@ -302,12 +313,14 @@ export default function Home() {
             onPressExit={() => resetModalState()}
             onChangeText={modalType === "create" ? setCreateModalText : setEditModalText}
             value={modalType === "create" ? createModalText : editModalText }
-            onPressCreateOrEdit={() => {modalType === "create"? createTaskHandler(createModalText) : updateTaskHandler(idForModal, editModalText)}}
+            onPressCreateOrEdit={() => {modalType === "create"? createTaskHandler((tasksCreated).toString(), createModalText, false) : updateTaskHandler(idForModal, editModalText)}}
             taskId={idForModal}
             taskTodo={todoForModal}
             setToEdit={() => editModalHandler()}
             removeTask={() => removeModalHandler(idForModal)}
             onPressReload={reloadTasksHandler}
+            createOrEditColor={modalType === "create"? createModalText? {backgroundColor:colors.principal.purpleDark} : {backgroundColor:colors.base.gray500} : editModalText? {backgroundColor:colors.principal.purpleDark} : {backgroundColor:colors.base.gray500}}
+            isDisabled={modalType === "create"? createModalText? false : true : editModalText? false : true}
              />
       </MainContainer>
     );

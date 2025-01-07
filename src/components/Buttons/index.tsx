@@ -6,15 +6,19 @@ import { MainContainer,
 type Props = {
     content? : string | null;
     buttonType? : string;
-    onPress?: any;
+    onPress?: any | null;
     isVisible?: any | null;
+    createOrEditColor?: any | null;
+    isDisabled?: boolean;
 }
 
 export default function AppButton ({
     buttonType = "default", 
     content = "", 
     onPress = null, 
-    isVisible = null} : Props){
+    isVisible = null,
+    createOrEditColor,
+    isDisabled} : Props){
 
     if (buttonType === "default") {
         return (
@@ -47,7 +51,7 @@ export default function AppButton ({
     }
     if (buttonType === "createOrEdit") {
         return (
-            <MainContainer onPress={onPress}>
+            <MainContainer onPress={onPress} style={createOrEditColor} disabled={isDisabled}>
                 <SvgXml xml={AppSvg.createSign} />
             </MainContainer>
         )

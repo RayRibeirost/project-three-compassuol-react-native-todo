@@ -37,6 +37,8 @@ type Props = {
   setToEdit?: () => void;
   removeTask?: () => void;
   onPressReload?: () => void;
+  createOrEditColor?: any;
+  isDisabled: boolean;
 };
 
 export default function AppModal({
@@ -51,6 +53,8 @@ export default function AppModal({
   setToEdit,
   removeTask,
   onPressReload,
+  createOrEditColor,
+  isDisabled
 }: Props) {
   if (modalType === "create") {
     return (
@@ -78,10 +82,12 @@ export default function AppModal({
                       onChangeText={onChangeText}
                       value={value}/>
                   </ModalInputInnerContainer>
-                  <ModalInputButtonInnerContainer>
+                  <ModalInputButtonInnerContainer style={{maxWidth:52}}>
                     <AppButton 
                       buttonType="createOrEdit"
-                      onPress={onPressCreateOrEdit}/>
+                      onPress={onPressCreateOrEdit}
+                      createOrEditColor={createOrEditColor}
+                      isDisabled={isDisabled}/>
                   </ModalInputButtonInnerContainer>
                 </ModalInputContainer>
             </ModalOuterContainer>
@@ -124,7 +130,8 @@ export default function AppModal({
                   <AppButton 
                     buttonType="default" 
                     content="Remover" 
-                    onPress={removeTask}/>
+                    onPress={removeTask}
+                    />
                 </ModalButtonInnerContainer>
               </ModalButtonsContainer>
             </ModalOuterContainer>
@@ -159,10 +166,12 @@ export default function AppModal({
                       value={value}
                       onChangeText={onChangeText}/>
                   </ModalInputInnerContainer>
-                  <ModalInputButtonInnerContainer>
+                  <ModalInputButtonInnerContainer style={{maxWidth:52}}>
                     <AppButton 
                       buttonType="createOrEdit"
                       onPress={onPressCreateOrEdit}
+                      createOrEditColor={createOrEditColor}
+                      isDisabled={isDisabled}
                       />
                   </ModalInputButtonInnerContainer>
                 </ModalInputContainer>

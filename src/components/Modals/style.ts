@@ -1,6 +1,22 @@
 import { styled } from "styled-components/native";
 import { colors } from "../../constants/colors";
 
+import { Dimensions } from "react-native";
+
+const { height } = Dimensions.get("window")
+let inputWidth : string = ""
+
+if (height > 900) {
+    inputWidth = "85%"
+}
+else if (height > 700) {
+    inputWidth = "83%"
+} else if (height > 600) {
+    inputWidth = "81%"
+} else {
+    inputWidth = "79%"
+}
+
 export const ForeContainer = styled.View`
     flex : 1;
     align-items : center;
@@ -30,15 +46,19 @@ export const ModalInputContainer = styled.View`
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
+    height:auto;
     width: 100%;
 `;
 
 export const ModalInputInnerContainer = styled.View`
-    width: 79%;
+    flex-direction: row;
+    align-items: center;
+    width: ${inputWidth};
     height: auto;
 `;
 export const ModalInputButtonInnerContainer = styled.View`
     width: 19%;
+    min-height: 52px;
     height: auto;
 `;
 
