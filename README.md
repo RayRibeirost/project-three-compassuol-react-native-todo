@@ -50,3 +50,5 @@ The choice is entirely yours! After navigating the app, you can log out by press
   - Splashscreen
   - React Fonts
   - styled-components
+
+## 6. Presentation video [here](https://youtu.be/_3j9y0p3p6w)
